@@ -1,0 +1,132 @@
+#######################################
+# Node and package managers
+#######################################
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json.*.backup
+
+#######################################
+# Build and distribution artifacts
+#######################################
+dist/
+dist-*/
+build/
+out/
+release/
+tmp/
+temp/
+.cache/
+.eslintcache
+coverage/
+*.tgz
+
+#######################################
+# Environment and secrets
+#######################################
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Local service or tooling env files
+*.env.local
+*.env.development.local
+*.env.test.local
+*.env.production.local
+
+#######################################
+# Logs and runtime output
+#######################################
+logs/
+*.log
+log.*
+*.out
+*.err
+
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+#######################################
+# Databases and local state
+#######################################
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+*.sqlite-journal
+
+state/
+state_*/
+data/
+data_*/
+app_data/
+user_data/
+cache/
+cache_*/
+
+#######################################
+# Electron specific artifacts
+#######################################
+*.asar
+*.asar.unpacked
+
+# Electron builder output
+electron-builder.yml.bak
+!electron-builder.yml
+
+#######################################
+# OS generated files
+#######################################
+.DS_Store
+.DS_Store?
+Thumbs.db
+thumbs.db
+desktop.ini
+$RECYCLE.BIN/
+
+#######################################
+# Editor and IDE files
+#######################################
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/tasks.json
+
+.idea/
+*.iml
+
+# Misc editor backups
+*~
+*.swp
+*.swo
+*.tmp
+*.bak
+
+#######################################
+# Test and tooling artifacts
+#######################################
+.jest/
+jest-cache/
+jest-results/
+.nyc_output/
+reports/
+report-*/
+
+#######################################
+# Project specific safety
+#######################################
+# Local AI or system logs for the assistant
+assistant_logs/
+system_logs/
+toolbox_reports/
+
+# Local exports and user generated artifacts
+exports/
+exports_*/
+backups/
+backups_*/

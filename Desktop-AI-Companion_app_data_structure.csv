@@ -1,0 +1,16 @@
+full_path,relative_path,name,item_type,extension,size_bytes,created_at,modified_at,depth,parent_directory,line_count,size_kb
+F:\Desktop-AI-Companion\public,public,public,Directory,,0,2025-08-18 06:33:22,2025-08-18 06:33:22,1,Desktop-AI-Companion,0,0.0
+F:\Desktop-AI-Companion\src,src,src,Directory,,0,2025-08-18 06:33:22,2025-08-18 06:33:22,1,Desktop-AI-Companion,0,0.0
+F:\Desktop-AI-Companion\.env,.env,.env,File,,233,2025-08-18 06:30:17,2025-02-25 03:20:36,1,Desktop-AI-Companion,2,0.23
+F:\Desktop-AI-Companion\.gitignore,.gitignore,.gitignore,File,,0,2025-08-18 06:30:17,2025-02-25 03:13:31,1,Desktop-AI-Companion,0,0.0
+F:\Desktop-AI-Companion\Desktop-AI-Companion-faq.md,Desktop-AI-Companion-faq.md,Desktop-AI-Companion-faq.md,File,.md,6776,2025-08-18 07:11:36,2025-08-18 07:12:33,1,Desktop-AI-Companion,158,6.62
+F:\Desktop-AI-Companion\package-lock.json,package-lock.json,package-lock.json,File,.json,238243,2025-08-18 06:30:17,2025-02-25 03:24:52,1,Desktop-AI-Companion,5568,232.66
+F:\Desktop-AI-Companion\package.json,package.json,package.json,File,.json,850,2025-08-18 06:30:17,2025-02-25 03:24:51,1,Desktop-AI-Companion,27,0.83
+F:\Desktop-AI-Companion\public\index.html,public\index.html,index.html,File,.html,189,2025-08-18 06:33:22,2025-02-25 03:17:12,2,public,10,0.18
+F:\Desktop-AI-Companion\src\main,src\main,main,Directory,,0,2025-08-18 06:33:22,2025-08-18 06:33:22,2,src,0,0.0
+F:\Desktop-AI-Companion\src\renderer,src\renderer,renderer,Directory,,0,2025-08-18 06:33:22,2025-08-18 06:33:22,2,src,0,0.0
+F:\Desktop-AI-Companion\src\styles,src\styles,styles,Directory,,0,2025-08-18 06:33:22,2025-08-18 06:33:22,2,src,0,0.0
+F:\Desktop-AI-Companion\src\main\main.js,src\main\main.js,main.js,File,.js,1198,2025-08-18 06:33:22,2025-02-25 03:17:36,3,main,41,1.17
+F:\Desktop-AI-Companion\src\renderer\App.js,src\renderer\App.js,App.js,File,.js,1469,2025-08-18 06:33:22,2025-02-25 03:18:19,3,renderer,49,1.43
+F:\Desktop-AI-Companion\src\renderer\index.js,src\renderer\index.js,index.js,File,.js,294,2025-08-18 06:33:22,2025-02-25 03:17:59,3,renderer,12,0.29
+F:\Desktop-AI-Companion\src\styles\App.css,src\styles\App.css,App.css,File,.css,354,2025-08-18 06:33:22,2025-02-25 03:18:34,3,styles,20,0.35

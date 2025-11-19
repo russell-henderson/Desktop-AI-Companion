@@ -1,0 +1,10 @@
+source_file,dependency_name,version_spec,type
+package.json,dotenv,^16.0.0,Production
+package.json,electron,^24.2.0,Production
+package.json,openai,^4.85.4,Production
+package.json,react,^18.2.0,Production
+package.json,react-dom,^18.2.0,Production
+package.json,concurrently,^7.0.0,Development
+package.json,cross-env,^7.0.3,Development
+package.json,electron-builder,^25.1.8,Development
+package.json,wait-on,^7.0.0,Development
