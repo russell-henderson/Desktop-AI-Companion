@@ -10,37 +10,58 @@
 
 ### 2.1 Module Overview
 -   **Main Process (Node.js)**
-    -   `MainApp`: Entry point, window management.
+    -   `main.ts`: Entry point, window management, IPC handlers.
     -   `AIService`: Wraps OpenAI SDK, manages API keys.
-    -   `DataService`: Manages SQLite connection and schema.
-    -   `ToolboxService`: Executes system tools (Process, Logs, Network).
-    -   `NotebookService`: Handles semantic search and embeddings.
+    -   `Database`: Manages SQLite connection and schema (using sql.js).
+    -   `ProjectService`: Manages project CRUD and chat linking.
+    -   `NotebookService`: Handles notebook entries with keyword search (ready for embeddings).
+    -   `ToolboxService`: Executes system tools (Process Inspector, Event Log Triage, Network Check).
+    -   `MonitoringService`: Lightweight monitoring loop for CPU, memory, and system health.
+    -   `DashboardService`: Aggregates dashboard summary data.
+    -   **Repositories**: ProjectRepository, ChatRepository, MessageRepository, NotebookRepository, ToolReportRepository, NotificationRepository.
 -   **Preload Layer**
-    -   `contextBridge`: Exposes `window.ai` API.
--   **Renderer Process (React + Vite)**
-    -   `App`: Root component.
-    -   `Dashboard`: A-M layout container.
-    -   `ChatInterface`: Message list and input.
-    -   `ToolboxPanel`: UI for system tools.
+    -   `preload.ts`: Exposes `window.desktop` and `window.ai` APIs via contextBridge.
+-   **Renderer Process (React + TypeScript + Vite)**
+    -   `App.tsx`: Root component with navigation routing.
+    -   `DashboardGrid`: A-M layout container with cards D, E, F, G, H.
+    -   `ChatPanel`: Full chat interface with header (I), area (K), and input (J).
+    -   `ProjectsView`: Project management UI.
+    -   `NotebookView`: Notebook entry list and editor.
+    -   `SystemView`: Toolbox tools UI and report history.
+    -   `NotificationManager`: Toast notifications and history.
 
-### 2.2 IPC Interface (`window.ai`)
+### 2.2 IPC Interface (`window.desktop` / `window.ai`)
 
 #### Chat & AI
--   `ai.sendMessage(conversationId: string, content: string, attachments?: any[]): Promise<Message>`
--   `ai.getModels(): Promise<Model[]>`
+-   `sendMessage(conversationId: string, content: string, attachments?: any[]): Promise<AiMessage>`
+-   `getDashboardSummary(): Promise<DashboardSummary>`
+-   `getChats(): Promise<ChatListItem[]>`
+-   `getMessages(chatId: string): Promise<ChatMessage[]>`
 
-#### Data & Projects
--   `ai.getProjects(): Promise<Project[]>`
--   `ai.createProject(data: ProjectDTO): Promise<Project>`
--   `ai.getRecentActivity(): Promise<ActivityItem[]>`
+#### Projects
+-   `projects.list(): Promise<ProjectRecord[]>`
+-   `projects.get(id: string): Promise<ProjectRecord | null>`
+-   `projects.create(input): Promise<ProjectRecord>`
+-   `projects.update(id: string, input): Promise<ProjectRecord | null>`
+-   `projects.delete(id: string): Promise<void>`
+-   `projects.linkChat(chatId: string, projectId: string | null): Promise<void>`
 
 #### Notebook
--   `ai.searchNotebook(query: string, scope?: string): Promise<NotebookEntry[]>`
--   `ai.saveNotebookEntry(entry: NotebookEntryDTO): Promise<NotebookEntry>`
+-   `notebook.list(filters?): Promise<NotebookEntryRecord[]>`
+-   `notebook.get(id: string): Promise<NotebookEntryRecord | null>`
+-   `notebook.create(input): Promise<NotebookEntryRecord>`
+-   `notebook.update(id: string, input): Promise<NotebookEntryRecord | null>`
+-   `notebook.delete(id: string): Promise<void>`
+-   `notebook.search(query: string, projectId?: string): Promise<NotebookEntryRecord[]>` (keyword-based, ready for semantic)
 
 #### Toolbox
--   `ai.runTool(toolName: string, params?: any): Promise<ToolReport>`
--   `ai.getSystemStatus(): Promise<SystemStatus>`
+-   `toolbox.listReports(): Promise<ToolReportRecord[]>`
+-   `toolbox.getReport(id: string): Promise<ToolReportRecord | null>`
+-   `toolbox.run(toolName: string, chatId?: string): Promise<ToolReportRecord>` (ProcessInspector, EventLogTriage, NetworkCheck)
+
+#### Notifications
+-   `notifications.list(unreadOnly?: boolean): Promise<NotificationRecord[]>`
+-   `notifications.markRead(id: string): Promise<void>`
 
 ## 3. Data Model (SQLite)
 

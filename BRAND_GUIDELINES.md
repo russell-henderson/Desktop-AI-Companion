@@ -1,263 +1,345 @@
----
-Version: 0.1.0
-Last Updated: 2025-11-19
-Status: Draft
-Owner: Desktop AI Companion Team
----
-
 # BRAND_GUIDELINES.md
 
-## 1. Brand Identity
+```markdown
+Desktop AI Companion · Nova
 
-### 1.1 Mission
+Last updated: 2025-11-19  
 
-Give power users a trusted desktop partner that understands their Windows system, current work, and personal workflow, then explains everything in clear language.
-
-### 1.2 Positioning
-
-Desktop AI Companion is a system aware assistant for Windows. It combines a modern chat experience, targeted system tools, and a personal knowledge base in one focused application.
-
-### 1.3 Brand Values
-
-- **Clarity**  
-  Always explain what is happening, what was inspected, and what will change.
-
-- **Control**  
-  The user decides when scans run and when changes occur. The assistant recommends, it does not act silently.
-
-- **Trust**  
-  Data is stored locally by default. The app is explicit about permissions and scopes.
-
-- **Support**  
-  The assistant aims to reduce friction around troubleshooting, configuration, and day to day tasks.
-
-- **Continuity**  
-  Projects, chats, and notebook entries form a long term memory that the assistant can reuse.
-
-### 1.4 Personality
-
-The assistant persona (default name: **Nova**) should feel:
-
-- Calm and confident, never dramatic.
-- Technically competent but not arrogant.
-- Helpful and proactive with suggestions, yet respectful of user control.
-- Curious about context. It asks clarifying questions before risky actions.
-
-Nova is a specialist, not a comedian. Light warmth is welcome. Jokes and small talk stay in the background.
+These guidelines define the visual and verbal identity for the **Desktop AI Companion** and its system avatar **Nova**.  
+They are the source of truth for colors, typography, spacing, and tone.  
+See `UI.md` for layout rules and component structure.
+```
 
 ---
 
-## 2. Naming and Terminology
+## 1. Brand Foundations
 
-Use these terms consistently across UI copy, docs, and marketing.
+### 1.1 Product identity
 
-- **Desktop AI Companion**  
-  The product name. Capitalize each word.
+**Product name**  
+Desktop AI Companion
 
-- **Nova**  
-  Default name for the assistant persona inside the app. Users may rename it in settings.
+**Persona**  
+Nova, a calm and precise system expert who helps Windows power users understand and manage their machine.
 
-- **Project**  
-  A manually created workspace that links chats, folders, and notebook entries.
+**Positioning**  
+A trusted, local desktop assistant that can speak both human and system language.  
+It focuses on three things:
 
-- **Chat**  
-  A conversation thread between the user and Nova.
+1. Clear visibility into system health  
+2. Fast, focused actions through tools  
+3. Reusable knowledge through projects and notebook entries  
 
-- **Notebook**  
-  A personal vault of prompts, snippets, notes, and templates with semantic search.
+### 1.2 Brand values
 
-- **Toolbox**  
-  A set of explicit system tools such as Process Inspector, Event Log Triage, and Network Check.
+- **Clarity first**  
+  Information is always more important than decoration.
 
-- **Insight**  
-  A short, structured note created by the app, usually as the result of monitoring or a tool run.
+- **Action over curiosity**  
+  Every panel, card, and prompt should invite a concrete next step.
 
-- **Notification**  
-  A time stamped alert that slides up from the bottom and can be opened for more detail.
+- **Reassuring technical depth**  
+  Nova is not playful or quirky. It is kind, steady, and deeply competent.
 
-- **Scan**  
-  A user initiated system inspection. Never imply that scans start on their own.
+- **Safety and control**  
+  The user is always in control of scans, tools, and changes.
 
 ---
 
-## 3. Visual Identity
+## 2. Color System
 
-### 3.1 Color Palette
+The palette is opinionated and tightly scoped.  
+Colors are never decorative. Every color has a role.
 
-Base palette (provided):
+### 2.1 Core tokens
 
-- Orange: `#E65D00`
-- Light blue: `#EDF7FD`
-- Green: `#0CBD85`
-- Blue: `#0D99C9`
-- Cool grey: `#D8E4ED`
+These names should be configured in `tailwind.config.cjs` under `theme.extend.colors.brand`  
+and treated as the single source of truth.
 
-Token naming:
+| Token             | Hex      | Purpose                                                     |
+| ----------------- | -------- | ----------------------------------------------------------- |
+| `brand.canvas`    | `#F0F4F8`| Global app background behind all cards                      |
+| `brand.sidebar`   | `#DFEBF7`| Sidebar background                                         |
+| `brand.cyan`      | `#0D95C5`| Primary action, user chat bubbles, active nav pills        |
+| `brand.emerald`   | `#0DBC83`| Healthy system, success states, “all good” badges          |
+| `brand.orange`    | `#E45C00`| Warnings, high severity system alerts                      |
+| `brand.ink`       | `#243135`| Primary text and dark UI surfaces                          |
+| `brand.white`     | `#FFFFFF`| Cards, chat bubbles, surface panels                        |
 
-- `--color-primary-blue` = `#0D99C9`
-- `--color-primary-green` = `#0CBD85`
-- `--color-primary-orange` = `#E65D00`
-- `--color-surface-main` = `#EDF7FD`
-- `--color-surface-alt` = `#D8E4ED`
-- `--color-text-main` = `#10212B` (derived dark navy, not pure black)
-- `--color-text-muted` = rgba version of text color at 70 percent
+Supporting neutrals can be derived from Tailwind gray, or introduced as:
 
-Severity colors mapped into the palette:
+- `neutral.100` `#E3E8EF`  
+- `neutral.200` `#CBD2E1`  
+- `neutral.700` `#3B4250`
 
-- Info: use `--color-primary-blue` for icons, badges, and progress accents.
-- Success: use `--color-primary-green`.
-- Warning: use a softer orange derived from `--color-primary-orange` at slightly lower saturation.
-- Critical: use `--color-primary-orange` at full strength, paired with calm surfaces. Do not use flashing effects.
+### 2.2 Usage rules
+
+**Primary actions**  
+
+- Buttons that send, run tools, or confirm operations use `brand.cyan` fill and white text.  
+- Hover state uses a slightly darker cyan (`#0B7EA6` suggested) with the same text color.
+
+**System health**
+
+- Healthy or idle: accents in `brand.emerald`.  
+- Elevated or warning: cards and badges in `brand.orange`.  
+- Critical: `brand.orange` background with `brand.ink` text or white text, plus icon.
+
+**Chat bubbles**
+
+- User messages: `brand.cyan` background, white text, rounded “pill” shape.  
+- Nova messages: white card with `brand.ink` text and `shadow.card`.
+
+**Notebook and projects**
+
+- Neutral by default: white cards on `brand.canvas`.  
+- Pinned or important entries can use a left border or small tag in `brand.cyan`.
+
+**Do not**
+
+- Do not use `brand.orange` for buttons that are not warnings or destructive actions.  
+- Do not mix `brand.cyan` and `brand.orange` in the same component unless it clearly represents a comparison of safe vs warning.  
+- Do not introduce new accent colors without adding them to this file and `tailwind.config`.
+
+---
+
+## 3. Elevation, Radius, and Spacing
+
+### 3.1 Corner radius
+
+Configure in Tailwind:
+
+- `rounded.card` → `1.25rem` (20 px) for all main cards and large buttons  
+- `rounded.full` for pills, nav items, and chat bubbles  
+- Form fields may use `rounded-lg` if they need slightly tighter geometry
 
 Rules:
 
-- Do not use bright red outside critical situations.  
-- Keep surfaces light with subtle gradients. Cards should feel soft and approachable.
+- All primary surfaces (cards, toasts, modals, slide overs) share `rounded.card`.  
+- Inner elements (tags, chips) use `rounded-full` or `rounded-lg` only.
 
-### 3.2 Typography
+### 3.2 Shadows
 
-Primary font: **Inter** (preferred) or **System UI** stack as fallback.
+Configure in Tailwind:
+
+- `shadow.card` → `0 14px 30px rgba(0, 0, 0, 0.07)`  
 
 Usage:
 
-- Page titles and main headings:  
-  - Weight 600 or 700  
-  - Size range 22 to 28 px
-- Section headings and card titles:  
-  - Weight 600  
-  - Size range 16 to 20 px
-- Body text:  
-  - Weight 400  
-  - Size 13 to 15 px
-- Metadata, labels, and captions:  
-  - Weight 500  
-  - Size 11 to 12 px  
-  - Use muted text color.
+- Cards, chat bubbles (Nova), toasts, slide overs.  
+- Never apply heavier shadows than `shadow.card`.  
+- Hover can use a slightly stronger y offset but the same blur and alpha.
 
-General rules:
+### 3.3 Spacing
 
-- Limit to two font weights on any single screen.  
-- Line height 1.4 to 1.6 for body text.  
-- Avoid all caps for long phrases. Reserve all caps for short labels or tags.
+Adopt an 8 px spacing grid:
 
-### 3.3 Logo and Iconography
+- XS: 4 px  
+- S: 8 px  
+- M: 16 px  
+- L: 24 px  
+- XL: 32 px  
 
-**Product icon**
+Rules:
 
-- Simple square icon with:
-  - Rounded rectangle representing a card.  
-  - Small circular accent in the top corner to represent Nova.  
-  - Use blue or green as primary fill, orange as accent.
-
-Spacing:
-
-- Maintain minimum padding equal to 10 percent of the icon size around the icon when placed near other elements.
-
-**Assistant avatar**
-
-- Animated or still avatar that:
-  - Avoids human likeness that suggests gender or age.
-  - Uses colors from the palette.
-  - Can display subtle state changes (listening, thinking, idle) through motion or glow.
-
-**Icons**
-
-- Stroke based, rounded corners, medium stroke width.
-- Consistent grid (typically 20 or 24 px artboard).
-- Use the same icon set across the app. Do not mix sharp and rounded icon styles.
+- Card padding: 24 px  
+- Gap between major sections: 24–32 px  
+- Gap between chat messages: 8–12 px  
 
 ---
 
-## 4. UI and UX Guidelines
+## 4. Layout Principles
 
-### 4.1 Layout
+High level layout is fully defined in `UI.md`.  
+Brand guidelines here describe the intended feel.
 
-- Use a clear primary column for the dashboard content and chat area.
-- Keep the left sidebar persistent for navigation and context.
-- Cards (D, E, F, G, H) should align on a simple grid:
-  - Shared heights in rows.
-  - Even horizontal spacing.
-- Chat area K should expand to fill vertical space, with the input locked to the bottom.
+1. **Full height shell**  
+   - `App` is a `flex` container with sidebar on the left and main content on the right.  
+   - The only scrollable region is the chat message list.
 
-### 4.2 Cards and Surfaces
+2. **Sidebar rail**  
+   - Background `brand.sidebar`.  
+   - Avatar at the top, main nav pills in the middle, utilities (Toolbox, Optimization Mode, Activity) pinned to the bottom.  
+   - Active nav pill: `brand.cyan` fill, white text. Inactive: transparent, `brand.ink` text.
 
-- Cards have:
+3. **Heads up deck**  
+   - Three main cards at the top of the main area: Watchdog, Quick Actions, Workspace.  
+   - These sit on the `brand.canvas` background with `shadow.card` and `rounded.card`.  
+   - Watchdog uses status colors (emerald for ok, orange for elevated) according to system state.
 
-  - Rounded corners (8 to 16 px radius).
-  - Soft inner gradient or subtle noise, not flat white.
-  - Shadow with low opacity and wide blur for a floating effect.
+4. **Chat panel as the hero**  
+   - Occupies the lower 60 to 70 percent of the viewport.  
+   - Visible without vertical scroll except inside the message list.  
+   - Input bar is a floating pill above the bottom edge, not glued to the window frame.
 
-- Primary cards (F, G, H) are more colorful.  
-- Secondary cards (D, E, notifications list) use lighter surfaces and accent bars.
-
-### 4.3 Severity and Status
-
-- Use color and icon shape together:
-
-  - Info: blue circle with "i" or radar icon.
-  - Success: green check.
-  - Warning: orange triangle.
-  - Critical: orange circle with exclamation mark.
-
-- Combine with clear text labels such as "Warning" or "Critical" at the start of the message. Do not rely on color alone.
+5. **Notebook slide over**  
+   - Right side slide over panel that opens from Notebook controls (top header and chat input).  
+   - Background white, `shadow.card`, `rounded.card` on the inner edge.  
+   - Never permanently steals horizontal space from the chat when closed.
 
 ---
 
-## 5. Content Guidelines
+## 5. Typography
 
-### 5.1 Voice and Tone
+### 5.1 Font stack
 
-- Speak in first person singular for the assistant:  
-  - "I checked your processes and found three that use significant memory."
-- For actions and changes, be explicit:  
-  - "If you agree, I will end this process."
-- Avoid slang and memes.  
-- Keep sentences concise, especially in tool reports and notifications.
+Use **Inter** as the primary typeface, with the following stack:
 
-### 5.2 Explanations
+```css
+font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+````
 
-- Always separate three parts:
+### 5.2 Type scale
 
-  1. **What** was done or found.
-  2. **Why** it matters.
-  3. **Next** available actions.
+Recommended Tailwind classes:
+
+- Page title: `text-2xl` or `text-3xl`, `font-semibold`
+- Section titles and card headings: `text-lg`, `font-semibold`
+- Body text: `text-sm` or `text-base`, `font-normal`
+- Small labels, tags: `text-xs`, `font-medium`
+
+### 5.3 Text color rules
+
+- Default text on light surfaces: `brand.ink`
+- Muted text: `text-slate-500` or `rgba(36, 49, 53, 0.7)`
+- Text on `brand.cyan`: white
+- Text on `brand.orange`: white or `brand.ink` depending on contrast needs
+
+---
+
+## 6. Interaction and States
+
+### 6.1 Navigation
+
+- Active nav items: filled pill with `brand.cyan`.
+- Hover: lighter cyan background, `cursor-pointer`.
+- Focus: visible focus ring using Tailwind `ring-2 ring-offset-2 ring-brand.cyan`.
+
+### 6.2 Buttons
+
+**Primary**
+
+- Fill `brand.cyan`, white text, `rounded-full` or `rounded-card`.
+- Hover: darker cyan, subtle scale up (`scale-105`) within motion preferences.
+- Disabled: `opacity-60` and `cursor-not-allowed`.
+
+**Secondary**
+
+- White or transparent background with `brand.cyan` border and text.
+- Hover: light cyan background.
+
+**Destructive / warning**
+
+- Use `brand.orange` only when the action is destructive or directly tied to a warning card.
+- Confirm flows should require clear copy, not just color.
+
+### 6.3 Severity mapping
+
+Use the palette and tokens consistently:
+
+- **Info:** soft blue or neutral accents; usually not color coded heavily.
+- **Success / Healthy:** `brand.emerald`.
+- **Warning / Elevated:** `brand.orange` as main accent.
+- **Critical:** combination of `brand.orange` fill and strong iconography, with clear copy.
+
+### 6.4 Motion
+
+- Use small, quick transitions (150–200 ms) on hover, focus, toast slides, and slide overs.
+- Respect `prefers-reduced-motion` and disable non essential transitions when set.
+
+---
+
+## 7. Voice and Content
+
+### 7.1 Tone
+
+Nova uses:
+
+- Short, clear sentences
+- Direct recommendations, no hype
+- Occasional reassurance when reporting scary issues, such as crashes or high GPU usage
+
+Examples:
+
+- Good: “GPU usage is elevated. I recommend running Process Inspector to see which app is responsible.”
+- Avoid: “Uh oh, your GPU is freaking out.”
+
+### 7.2 System insight messages
+
+System notifications and heads up messages should:
+
+- State what happened
+- State why it matters
+- Offer one clear next action
+
+Pattern:
+
+> `What` + `Impact` + `Next step`
 
 Example:
 
-> I scanned your network connection and noticed intermittent packet loss.  
-> This can cause lag or timeouts in online tools.  
-> You can try restarting your router or run a deeper network test.
+> “New startup program detected. It may slow boot time. Open Toolbox to review startup entries.”
 
-### 5.3 Error Messages
+### 7.3 Notebook entries
 
-- Avoid blame. Focus on steps forward.
-- Provide at least one concrete suggestion.
-- Examples:
-
-  - "I could not read the event log due to access restrictions. Try running the app as administrator."
-  - "The file path no longer exists. You can browse to a new location or unlink it from this project."
+- Titles are concise and action oriented.
+- Tags help retrieval: `gpu`, `driver`, `bug-report`, `checklist`.
+- Templates should explain how to use them in one short sentence in the description, not inside the main content.
 
 ---
 
-## 6. Usage Examples
+## 8. Accessibility
 
-### 6.1 Dashboard Card Copy
+- Aim for WCAG AA contrast for all text.
+- Check cyan and orange usage on white and on the sidebar to ensure contrast is sufficient.
+- Never communicate severity using color alone. Include icons and clear labels like “Warning” or “Healthy”.
+- All interactive elements must be reachable with keyboard navigation and show a visible focus state.
 
-- D System card title: "System Overview"
-- Subtitle: "Quick look at current health."
-- CTA button: "Open toolbox"
+---
 
-### 6.2 Notification Copy
+## 9. Implementation Checklist
 
-- Title: "High CPU usage detected"
-- Body: "Your system has been above 90 percent CPU for 5 minutes. Open Process Inspector to see which apps are responsible."
+When implementing or refactoring UI, verify:
 
-### 6.3 Notebook Entry Names
+1. **Tailwind tokens**
 
-- "Bug report prompt template"
-- "GPU driver crash checklist"
-- "Linux log triage snippet"
-- "Client kickoff call notes"
+   - `brand.canvas`, `brand.sidebar`, `brand.cyan`, `brand.emerald`, `brand.orange`, `brand.ink` are defined.
+   - `rounded.card` and `shadow.card` exist and are used on all cards.
 
-Keep names action oriented and descriptive. Avoid vague labels such as "Stuff" or "Notes 3".
+2. **Layout alignment with `UI.md`**
 
+   - Full height layout, single scroll region in chat message list.
+   - Sidebar and heads up deck match the described positions.
+
+3. **Color semantics**
+
+   - Orange appears only in alerts, warnings, and critical states.
+   - Cyan appears in actions and user chat only.
+   - Emerald appears only for healthy or success states.
+
+4. **Chat experience**
+
+   - Nova vs user bubbles follow the color rules.
+   - Notebook slide over opens from Notebook controls and uses the specified styling.
+
+5. **Accessibility**
+
+   - Focus rings visible.
+   - Text contrast passes AA in both base light palette and any future variants.
+
+---
+
+## 10. Future Extensions
+
+When adding new features or views:
+
+- Reuse the existing tokens and component patterns before inventing new ones.
+- If a new color or elevation level is required, update this file first and then `tailwind.config`.
+- Confirm that any new alert types still fit within the cyan, emerald, orange, and ink system.
+
+These guidelines keep the Desktop AI Companion coherent as it grows.
+All visual and copy changes should be checked against this document and `UI.md` before merging.
+
+```bash
+::contentReference[oaicite:0]{index=0}
+```

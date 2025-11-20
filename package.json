@@ -1,36 +1,48 @@
 {
     "name": "electron-openai-desktop-assistant",
     "version": "1.0.0",
+    "description": "Desktop AI Companion - A system-aware AI assistant for Windows with projects, notebook, and system tools",
+    "productName": "Desktop AI Companion",
     "main": "dist-electron/main.js",
-    "author": "YourName",
+    "author": "Desktop AI Companion Team",
     "license": "MIT",
     "scripts": {
         "dev": "concurrently \"npm:vite:dev\" \"npm:electron:dev\"",
         "vite:dev": "vite",
         "electron:dev": "wait-on tcp:3000 && tsc -p tsconfig.main.json && electron .",
         "build": "tsc -p tsconfig.main.json && vite build && electron-builder",
-        "preview": "vite preview"
+        "preview": "vite preview",
+        "test": "vitest --config testing/vitest.config.ts",
+        "test:ui": "vitest --ui --config testing/vitest.config.ts"
     },
     "dependencies": {
         "dotenv": "^16.0.0",
         "openai": "^4.85.4",
         "react": "^18.2.0",
-        "react-dom": "^18.2.0"
+        "react-dom": "^18.2.0",
+        "sql.js": "^1.13.0"
     },
     "devDependencies": {
+        "@testing-library/jest-dom": "^6.9.1",
+        "@testing-library/react": "^16.3.0",
+        "@testing-library/user-event": "^14.6.1",
         "@types/node": "^24.10.1",
         "@types/react": "^19.2.6",
         "@types/react-dom": "^19.2.3",
+        "@types/sql.js": "^1.4.9",
         "@vitejs/plugin-react": "^5.1.1",
+        "@vitest/ui": "^4.0.10",
         "autoprefixer": "^10.4.22",
         "concurrently": "^7.6.0",
         "cross-env": "^7.0.3",
         "electron": "^39.2.2",
         "electron-builder": "^25.1.8",
+        "jsdom": "^27.2.0",
         "postcss": "^8.5.6",
-        "tailwindcss": "^4.1.17",
+        "tailwindcss": "^3.4.15",
         "typescript": "^5.9.3",
         "vite": "^7.2.2",
+        "vitest": "^4.0.10",
         "wait-on": "^7.2.0"
     }
 }

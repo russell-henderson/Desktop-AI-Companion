@@ -1,268 +1,394 @@
-Here is a complete `README.md` that matches the current repo and the new PRD, brand, and UI plans.
-
-````markdown
 # Desktop AI Companion
 
-Desktop AI Companion is a Windows desktop app that brings an AI assistant directly into your system. It runs as an Electron shell with a React front end and uses OpenAI models to provide:
+Desktop AI Companion is a Windows desktop application that brings an AI assistant directly into your system. It runs inside an Electron shell with a React plus TypeScript front end and uses OpenAI models behind a secure IPC layer. The assistant understands your chats, your projects, your saved prompts, and key parts of your Windows environment, and surfaces everything in a structured dashboard.
 
-- Conversational help
-- System aware insights
-- Project oriented organization
-- A reusable notebook of prompts, snippets, and notes
-
-The long term goal is a safe and controllable desktop partner that feels closer to a local "Jarvis" than a simple chat client.
-
-> Status: Early prototype. The current code proves the Electron plus React plus OpenAI stack. New architecture, UI, projects, notebook, toolbox, and notifications are defined in the PRD and are being implemented next.
+Status: MVP implemented and tested. All core features in `PRD.md` for the first release are now live and passing build and test checks.
 
 ---
 
 ## Features
 
-### Implemented in the current prototype
+### System aware chat
 
-- Electron shell that wraps a React app.
-- Simple chat interaction with OpenAI:
-  - One prompt textarea.
-  - One button to send the prompt.
-  - A single response area.
+- Secure `AIService` in the Electron main process  
+- IPC endpoint `ai:sendMessage` exposed as `window.desktop.ai.sendMessage` (or equivalent)  
+- Persistent message history per chat stored in SQLite  
+- Chat bubbles with:
+  - User and assistant messages
+  - Tool reports rendered as collapsible blocks
+  - Inserted notebook content rendered inline
 
-### Planned for the MVP
+### Projects
 
-These features are specified in `PRD.md` and `UI.md` and will replace the simple demo UI.
+Phase 2A implemented
 
-- **Dashboard layout (A to M)**  
-  - Top bar with model selector and quick access buttons.  
-  - Workspace card, system overview card, and three primary cards for recent activity, suggested prompts, and notebook highlights.  
-  - Main chat area with bubbles and attachments.  
-  - Left sidebar for avatar, navigation, and context lists.  
-  - Bottom sidebar zone for toolbox and quick actions.
+- Project management with full CRUD:
+  - Create, read, update, delete projects
+  - Optional color and description
+- Project linking:
+  - Chats can be moved into a project
+  - Notebook entries can be scoped to a project
+- UI:
+  - `ProjectsView` with list and detail screens
+  - Project detail shows metadata plus related chats and notebook entries
+- IPC:
+  - `projects:list`
+  - `projects:get`
+  - `projects:create`
+  - `projects:update`
+  - `projects:delete`
+  - `projects:linkChat`
 
-- **Projects**  
-  - Manually created projects that link chats, folders, and notebook entries.  
-  - Project view with overview and recent work.
+### Notebook
 
-- **Notebook with semantic search**  
-  - Persistent vault for prompts, snippets, notes, and templates.  
-  - Search by meaning instead of exact text.  
-  - Easy insertion of entries into prompts.
+Phase 2B implemented
 
-- **Toolbox v1**  
-  - Process Inspector  
-  - Event Log Triage  
-  - Network Check  
-  Each tool runs only when you ask for it and posts a summary into the current chat.
+- Notebook entries with types:
+  - Prompt
+  - Snippet
+  - Note
+  - Template
+- Fields:
+  - Title, content, type, tags, scope, pinned
+- Features:
+  - Full CRUD through `NotebookService`
+  - Keyword search with type filtering
+  - Global or project scoped entries
+- Chat integration:
+  - "Insert from notebook" button in ChatInput
+  - Search driven picker to insert content into the current message
+- IPC:
+  - `notebook:list`
+  - `notebook:get`
+  - `notebook:create`
+  - `notebook:update`
+  - `notebook:delete`
+  - `notebook:search`  
+- Ready for semantic search:
+  - Service and schema are structured so embeddings can be added later
 
-- **Notifications and system insights**  
-  - Lightweight monitoring for CPU spikes, event log patterns, and network issues.  
-  - Slide up panels similar to GlassWire that show low, medium, or critical issues.  
-  - Notification history view.
+### Toolbox v1
 
-- **Local first storage**  
-  - All data stored in a local SQLite database under the user profile.  
-  - Later option to sync selected items such as notebook entries.
+Phase 2C implemented
 
-For the full product description see:
+Toolbox is a set of explicit, user triggered tools that inspect the system and post structured reports into chat.
 
-- [`PRD.md`](PRD.md)
-- [`BRAND_GUIDELINES.md`](BRAND_GUIDELINES.md)
-- [`UI.md`](UI.md)
-- [`Desktop-AI-Companion-faq.md`](Desktop-AI-Companion-faq.md)
+Implemented tools:
+
+- **Process Inspector**  
+  - PowerShell based process listing  
+  - Returns process name, PID, CPU, memory and related data
+
+- **Event Log Triage**  
+  - Reads Windows event logs  
+  - Groups errors and warnings by source and severity  
+  - Produces a summary suitable for plain language explanation
+
+- **Network Check**  
+  - Connectivity and DNS checks  
+  - Simple metrics and pass or fail status
+
+Features:
+
+- `SystemView` with tool tiles and report history
+- Each tool run:
+  - Creates a `ToolReport` entry in SQLite
+  - Posts a collapsible report message into the active chat
+- IPC:
+  - `toolbox:run`
+  - `toolbox:listReports`
+  - `toolbox:getReport`
+
+### Monitoring and notifications
+
+Phase 2D implemented
+
+- `MonitoringService` in main:
+  - CPU and memory monitoring loop on a timer (for example every 30 seconds)
+  - Creates notifications when thresholds are exceeded
+- `NotificationRepository`:
+  - Stores notifications with type, severity, title, message and metadata
+  - Tracks read and unread state
+- UI:
+  - Toast notifications with slide up animation
+  - Notification history view with severity based styling drawn from the brand palette
+- IPC:
+  - `notifications:list`
+  - `notifications:markRead`
+
+Notifications are informational by default. They suggest running a toolbox tool rather than acting on their own.
+
+### Dashboard and layout
+
+The main window follows the A through M layout defined in `UI.md`.
+
+- Top bar:
+  - Current context title
+  - Model or persona selector
+  - Notebook and settings shortcuts
+- Dashboard cards:
+  - Active project and system overview
+  - Recent activity
+  - Suggested prompts
+  - Notebook highlights
+- Chat section:
+  - Chat header with project and model badges
+  - Chat body with message history
+  - Chat input with attachment and notebook controls
+- Sidebar:
+  - Assistant avatar and role label
+  - Navigation items:
+    - Home
+    - Chats
+    - Projects
+    - Notebook
+    - System
+  - Context list for the selected section
+- Bottom sidebar zone:
+  - Toolbox entry point
+  - Settings and logs
+
+Layout is responsive and remains usable when the window is resized to narrower widths.
+
+### Persistence and data
+
+- SQLite backend using `sql.js` (WASM)  
+- Repositories for:
+  - Projects
+  - Chats
+  - Messages
+  - Notebook entries
+  - Tool reports
+  - Notifications
+- Full schema defined and seeded for initial dashboard content
+- All user data persists between sessions:
+  - Projects, chats, notebook entries, tool reports, notifications
 
 ---
 
 ## Architecture
 
-### Current prototype
+High level components:
 
-- **Main process**  
-  - Entry: `src/main/main.js`  
-  - Creates the Electron `BrowserWindow`.  
-  - Loads React either from `http://localhost:3000` in development or from the built files in production.
+- **Electron main process**
+  - Window management
+  - AIService
+  - DashboardService
+  - ProjectService
+  - NotebookService
+  - ToolboxService
+  - MonitoringService
+  - SQLite plus repository layer
+  - IPC handlers for all capabilities
 
-- **Renderer**  
-  - Entry: `src/renderer/index.js` and `src/renderer/App.js`.  
-  - Simple React component with:
-    - A textarea for user input.  
-    - A button that calls OpenAI through the Node SDK.  
-    - A paragraph that displays the latest response.
+- **Preload script**
+  - Uses `contextBridge` to expose a typed `window.desktop` API
+  - Only exposes high level methods such as:
+    - `desktop.ai.sendMessage`
+    - `desktop.projects.*`
+    - `desktop.notebook.*`
+    - `desktop.toolbox.*`
+    - `desktop.notifications.*`
+    - `desktop.dashboard.getSummary`
+  - Renderer cannot access Node or secrets directly
 
-- **Styling**  
-  - Basic styles in `src/styles/App.css` only.
+- **Renderer**
+  - React plus TypeScript app
+  - Bundled with Vite
+  - Tailwind CSS configured with brand tokens and global styles
+  - Components:
+    - App shell and ErrorBoundary
+    - Sidebar
+    - TopBar
+    - DashboardGrid
+    - ChatPanel (ChatHeader, ChatArea, ChatInput)
+    - ProjectsView
+    - NotebookView
+    - SystemView
+    - NotificationHistory
+    - Reusable UI primitives for cards, toasts and report blocks
 
-> Important: The current prototype calls OpenAI directly from the renderer and reads the API key from an environment variable with a `REACT_APP_` prefix. This is acceptable only as a short term demo. The planned architecture moves OpenAI usage into the main process behind a preload and IPC layer so the key never reaches the renderer.
+- **Data and storage**
+  - SQLite via `sql.js` loaded in main
+  - Schema initialization from a schema file or embedded string
+  - SeedService for initial demo data
 
-### Planned architecture
+For more detail see:
 
-Planned design as described in the PRD:
-
-- Electron main process:
-  - Owns OpenAI client, system tools, notifications, and data access.
-- Preload script:
-  - Uses `contextBridge` to expose a small `window.ai` API to the renderer.
-- React renderer:
-  - Implements the dashboard, chat, projects, notebook, and toolbox UI.
-- Data store:
-  - Local SQLite database for projects, chats, notebook entries, toolbox reports, and notifications.
-- Optional embeddings service:
-  - For notebook semantic search and natural language file queries.
+- `TECHSPEC_ARCHITECTURE.md`
+- `Desktop-AI-Companion-faq.md`
+- `PRD.md`
+- `UI.md`
+- `BRAND_GUIDELINES.md`
 
 ---
 
-## Getting Started
+## Getting started
 
 ### Prerequisites
 
+- Windows 10 or Windows 11
 - Node.js 18 or later
 - npm 8 or later
-- An OpenAI API key
+- OpenAI API key
 
-### 1. Clone the repository
+### Clone the repository
 
 ```bash
-git clone <your-fork-or-repo-url>.git
+git clone <your-repo-url>.git
 cd Desktop-AI-Companion
 ````
 
-### 2. Install dependencies
+### Install dependencies
 
 ```bash
 npm install
 ```
 
-### 3. Configure environment variables
+### Configure environment
 
-Create a `.env` file in the project root if it does not already exist.
+Create a `.env` file at the project root. The exact keys may vary depending on the final service naming, but at minimum you will need:
 
 ```ini
-# Used by the current prototype in the React renderer
-REACT_APP_OPENAI_API_KEY=your-openai-key-here
-
-# Dev setting that tells Electron to load the React dev server
-ELECTRON_START_URL=http://localhost:3000
+OPENAI_API_KEY=your-openai-key-here
+# Add any other app specific settings here
 ```
 
-Guidelines:
+Notes:
 
-* Never commit your real key to version control.
-* In the future architecture the key will move to a non `REACT_APP_` variable read only by the main process.
+- Do not commit `.env` to version control.
+- The OpenAI key is loaded in the main process only. The renderer never sees it.
 
-### 4. Run the app in development
+### Run in development
 
-The development script starts both the React dev server and Electron.
+The dev script starts Vite for the renderer and Electron for the shell.
 
 ```bash
-npm start
+npm run dev
 ```
 
-This runs:
+Then:
 
-* `react-scripts start` on port 3000
-* Electron, which waits for the dev server and then loads it
+- A desktop window should open.
+- The dashboard and chat should render.
+- Open the dev tools in the renderer if you need to inspect UI behavior.
 
-### 5. Build the React bundle
+If your scripts differ, check `package.json` for the exact dev command names that Cursor set up.
+
+### Build for production
+
+To build the app:
 
 ```bash
 npm run build
 ```
 
-This builds the React app into the `build` directory using `react-scripts build`.
+This should:
 
-### 6. Package the Electron app
+- Run TypeScript checks
+- Build the renderer bundle with Vite
+- Package the Electron app with electron builder
+- Produce a Windows installer in the dist folder
 
-> Packaging assumes you have updated the Electron builder configuration in `package.json` before shipping to others.
-
-To create a distributable build:
-
-```bash
-npm run electron-pack
-```
-
-Electron Builder will generate installers and binaries under the `dist` folder.
+Any warnings about icons or description can be resolved later by adjusting electron builder config and package metadata.
 
 ---
 
 ## Scripts
 
-Defined in `package.json`:
+Scripts may vary slightly, but the standard set looks like:
 
-| Script                   | Description                                   |
-| ------------------------ | --------------------------------------------- |
-| `npm start`              | Run React dev server and Electron together    |
-| `npm run react-start`    | Start React dev server only                   |
-| `npm run electron-start` | Start Electron and point it at the dev server |
-| `npm run build`          | Build the React app for production            |
-| `npm run electron-pack`  | Package the app using electron builder        |
+| Script          | Description                                      |
+| --------------- | ------------------------------------------------ |
+| `npm run dev`   | Start Vite and Electron together for development |
+| `npm run build` | Run type checks, Vite build and electron builder |
+| `npm test`      | Run Vitest unit tests                            |
+| `npm run lint`  | Run the linter (if configured)                   |
 
----
-
-## Configuration and Environment
-
-Key files:
-
-* `.env`
-  Developer environment variables. Should not be committed with real secrets.
-
-* `Desktop-AI-Companion-faq.md`
-  Living technical FAQ and assessment for the project.
-
-* `PRD.md`, `BRAND_GUIDELINES.md`, `UI.md`
-  Product, brand, and UI specifications that describe where the app is going.
+Check `package.json` for the exact names and any additional scripts.
 
 ---
 
-## Security Notes
+## Testing
 
-* The current prototype reads the OpenAI key in the renderer process. Treat this build as a local experiment only.
-* Do not distribute binaries that embed real API keys.
-* Roadmap work will:
+Testing status for the current MVP:
 
-  * Move all secret usage to the main process.
-  * Use a preload bridge and IPC so the renderer never sees secrets.
-  * Store user data locally in a database instead of scattering it across JSON files.
+- TypeScript compilation: passing
+- Vite build: passing
+- Electron builder: Windows installer builds successfully
+- Linter: no errors
+- Unit tests: all passing
+- Manual testing:
+
+  - Projects CRUD verified
+  - Notebook CRUD and insertion verified
+  - Toolbox v1 tools verified with reports posted to chat
+  - Monitoring and notifications verified
+  - Navigation, layout, and persistence verified
+
+Testing guides and results:
+
+- `TESTING.md` manual test plan
+- `TESTING_RESULTS.md` current test run summary
+
+To run tests locally:
+
+```bash
+npm test
+```
+
+---
+
+## Security and privacy
+
+- OpenAI API key lives only in the main process.
+- Renderer communicates with main through a narrow, typed IPC surface.
+- All user data is stored locally in SQLite using `sql.js`.
+- No cloud sync or telemetry is enabled in the MVP build.
+- System tools and monitors are read only except where explicitly triggered:
+
+  - Process Inspector can end processes only when requested.
+  - Other tools inspect and report but do not change system state.
 
 ---
 
 ## Roadmap
 
-Short term milestones:
+Future work ideas that extend beyond the current MVP:
 
-1. Introduce preload and IPC for safe communication between renderer and main.
-2. Move OpenAI usage into the main process.
-3. Implement the new A to M dashboard layout.
-4. Add projects and basic notebook support.
-5. Implement Toolbox v1 (Process Inspector, Event Log Triage, Network Check).
-6. Add notifications and insight cards.
-7. Replace `react-scripts` with Vite and add TypeScript, ESLint, and Prettier.
+- Semantic notebook search using embeddings
+- Natural language file queries over indexed project folders
+- Visual context from the active window for spreadsheets and documents
+- Persona shifts based on foreground application
+- Optional cloud sync for prompts and notebook entries
+- Additional toolbox tools and more detailed monitoring
+- Dark mode and extended theming
 
-Longer term ideas:
-
-* Natural language file queries against indexed projects.
-* Visual context awareness for active windows.
-* Persona shifts based on the foreground application.
-* Selective cloud sync for notebook and prompts.
-* Advanced optimization mode with user approved automatic fixes.
-
-See `PRD.md` for detailed requirements and the current status.
+See `PRD.md` for more detail and open questions.
 
 ---
 
 ## Contributing
 
-This project is still under heavy design and architecture work.
+This project is under active development and already has a defined architecture and UI.
 
-If you want to contribute:
+If you plan to contribute:
 
-1. Read `PRD.md`, `BRAND_GUIDELINES.md`, `UI.md`, and `Desktop-AI-Companion-faq.md` to understand direction and constraints.
-2. Open an issue describing the change or feature you want to work on.
-3. Keep pull requests small and focused:
+1. Read `PRD.md`, `UI.md`, `BRAND_GUIDELINES.md`, `TECHSPEC_ARCHITECTURE.md`, `Desktop-AI-Companion-faq.md`, and `TESTING.md`.
+2. Open an issue describing the feature, refactor, or bug fix you want to work on.
+3. Follow these guidelines:
 
-   * One feature or fix per PR.
-   * Include notes on how you tested the changes.
+   - Keep pull requests focused and small.
+   - Maintain type safety and IPC contracts.
+   - Update docs when behavior changes.
+   - Run `npm run build` and `npm test` before submitting.
 
 ---
 
 ## License
 
-This project uses the MIT license as declared in `package.json`.
+This project uses the MIT license. See `LICENSE` for details.
 
-You are free to use, modify, and distribute the software under the terms of that license.
+```bash
+::contentReference[oaicite:0]{index=0}
+```

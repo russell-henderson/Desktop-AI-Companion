@@ -1,0 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes slide-up {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.animate-slide-up {
+    animation: slide-up 0.3s ease-out;
+}
+
+:root {
+    /* Legacy CSS variables kept for backward compatibility during migration */
+    --color-primary-blue: 13 153 201;
+    --color-primary-green: 12 189 133;
+    --color-primary-orange: 230 93 0;
+    --color-surface-main: 237 247 253;
+    --color-surface-alt: 216 228 237;
+    --color-text-main: 16 33 43;
+    --color-text-muted: 16 33 43 / 0.7;
+}
+
+html,
+body,
+#root {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: #F0F4F8; /* canvas */
+    color: #243135; /* text.primary */
+    overflow: hidden;
+}
+
+.app-shell {
+    min-height: 100vh;
+    background: linear-gradient(
+        180deg,
+        rgba(var(--color-surface-main) / 1) 0%,
+        rgba(var(--color-surface-alt) / 0.7) 100%
+    );
+}
+
+.chat-ai code,
+.chat-ai pre {
+    background-color: #243135; /* brand.ink */
+    color: #ffffff; /* white */
+    border-radius: 0.5rem; /* rounded-lg */
+    padding: 0.5rem 0.75rem; /* py-2 px-3 */
+    font-size: 0.75rem; /* text-xs */
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.chat-ai pre {
+    padding: 0.5rem 0.75rem;
+    overflow-x: auto;
+}
+
